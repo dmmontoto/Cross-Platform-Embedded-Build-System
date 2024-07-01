@@ -24,18 +24,23 @@
 include sources.mk
 
 # Platform Overrides
-PLATFORM = 
+PLATFORM ?= HOST 
 
-# Architectures Specific Flags
-LINKER_FILE = 
-CPU =
-ARCH = 
-SPECS = 
+# Compiler and Linker
+ifeq ($(PLATFORM),HOST)
+    CC = gcc
+    SOURCES = $(SOURCES_COMMON)
+    INCLUDES = $(INCLUDES_COMMON)
+    LDFLAGS =
+    CFLAGS = -Wall -Werror -g -O0 -std=c99 -DHOST
 
-# Compiler Flags and Defines
-CC = 
-LD = 
-LDFLAGS = 
-CFLAGS = 
-CPPFLAGs = 
+else ifeq ($(PLATFORM),MSP432)
+    CC = arm-none-eabi-gcc
+    SOURCES = $(SOURCES_COMMON) $(SOURCES_MSP432)
+    INCLUDES = $(INCLUDES_COMMON) $(INCLUDES_MSP432)
+    LDFLAGS = -T ../msp432p401r.lds
+    CFLAGS = -Wall -Werror -g -O0 -std=c99 -mcpu=cortex-m4 -mthumb \
+	         -march=armv7e-m -mfloat-abi=hard -mfpu=fpv4-sp-d16 \ 
+			 --specs=nosys.specs -DMSP432
 
+endif
