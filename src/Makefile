@@ -28,7 +28,7 @@ PLATFORM =
 
 # Architectures Specific Flags
 LINKER_FILE = 
-CPU = 
+CPU =
 ARCH = 
 SPECS = 
 
